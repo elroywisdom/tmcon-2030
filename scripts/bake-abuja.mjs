@@ -88,7 +88,7 @@ roads.push({
     [-2600, 1300],
     [-1500, 750],
     [-532, 267], // Abuja City Gate
-    [0, 0], // Stadium
+    [-340, 285], // North-West expressway bypass outside stadium
   ],
 })
 trafficPaths.push({
@@ -99,7 +99,7 @@ trafficPaths.push({
     [-2600, 1300],
     [-1500, 750],
     [-532, 267],
-    [0, 0],
+    [-340, 285],
   ],
 })
 
@@ -111,7 +111,7 @@ roads.push({
   isMajor: true,
   width: 14,
   pts: [
-    [0, 0],
+    [320, -480], // Connecting from north-east expressway junction
     [843, -615],
     [2200, -1000],
     [3500, -1250],
@@ -124,7 +124,7 @@ trafficPaths.push({
   id: 9002,
   name: 'Constitution Avenue',
   pts: [
-    [0, 0],
+    [320, -480],
     [843, -615],
     [2200, -1000],
     [3500, -1250],

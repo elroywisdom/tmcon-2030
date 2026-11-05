@@ -43,12 +43,13 @@ export default function InfoPanel() {
   const setFullscreenModal = useVenue((s) => s.setFullscreenModal)
   const isSeatView = useVenue((s) => s.isSeatView)
   const setViewFromSeat = useVenue((s) => s.setViewFromSeat)
+  const setIsBookingOpen = useVenue((s) => s.setIsBookingOpen)
+  const openBooking = useVenue((s) => s.openBooking)
 
   const currentPlaylist = liveShow ? playlists.show : playlists.idle
   const currentTrack =
     currentPlaylist[ledTrackIndex % currentPlaylist.length] || currentPlaylist[0]
 
-  const [isReserving, setIsReserving] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const zone = zones[activeZone]
 
@@ -250,7 +251,7 @@ export default function InfoPanel() {
                         className="cta cta-reserve"
                         onClick={() => {
                           play('click')
-                          setIsReserving(true)
+                          setIsBookingOpen(true)
                         }}
                       >
                         Reserve Seat →
@@ -289,7 +290,7 @@ export default function InfoPanel() {
                 className="reserve-seats-hero-btn outlined-block"
                 onClick={() => {
                   play('click')
-                  focusZone('vip')
+                  openBooking('vip')
                 }}
                 title="Select and reserve seats in the stadium"
               >
@@ -348,88 +349,6 @@ export default function InfoPanel() {
           </nav>
         </div>
       </aside>
-
-      {/* Interactive Seat Preview Drawer */}
-      {isReserving && (
-        <div className="modal-backdrop" onClick={() => setIsReserving(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setIsReserving(false)}>
-              <IconClose size={18} />
-            </button>
-            <div className="modal-header">
-              <span className="event-pill">INTERACTIVE DEMO PREVIEW</span>
-              <h2>Seat Selection & Sightline Preview</h2>
-              <p className="muted">
-                {zone?.label} • {selectedSeat?.label}
-              </p>
-            </div>
-
-            <div className="modal-summary">
-              <div className="summary-row">
-                <span>Selected Tier</span>
-                <strong>{zone?.label}</strong>
-              </div>
-              <div className="summary-row">
-                <span>Seat Position</span>
-                <strong>{selectedSeat?.label}</strong>
-              </div>
-              <div className="summary-row">
-                <span>Estimated Tier Value</span>
-                <span className="total-price">{naira(zone?.seating?.price || 0)}</span>
-              </div>
-            </div>
-
-            <div
-              style={{
-                background: '#fef3e2',
-                border: '2px solid #000',
-                borderRadius: '12px',
-                padding: '12px 14px',
-                margin: '16px 0',
-                fontSize: '12px',
-                lineHeight: '1.45',
-                color: '#1a1a1a',
-                boxShadow: '2px 2px 0 #000',
-              }}
-            >
-              <strong style={{ display: 'block', marginBottom: '4px', color: '#c44d00' }}>
-                <IconSparkle size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-                ARCHITECTURAL PREVIEW NOTICE
-              </strong>
-              Official tickets and registration for TM CON 2030 will open via authorized ticketing partners.
-              This interactive seat selector is for portfolio exploration and venue visualization. No personal data is stored.
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
-              <button
-                type="button"
-                className="cta cta-modal-submit"
-                onClick={() => {
-                  play('whoosh')
-                  setViewFromSeat(true)
-                  setIsReserving(false)
-                }}
-              >
-                <IconEye size={15} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-                VIEW SIGHTLINE FROM THIS SEAT
-              </button>
-
-              <button
-                type="button"
-                className="cta"
-                style={{
-                  background: '#ffffff',
-                  color: '#000000',
-                  boxShadow: '3px 3px 0 #000',
-                }}
-                onClick={() => setIsReserving(false)}
-              >
-                CLOSE PREVIEW
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* LED Fullscreen Modal Player */}
       {fullscreenModal && (

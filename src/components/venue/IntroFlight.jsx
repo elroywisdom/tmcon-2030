@@ -10,71 +10,47 @@ import { useVenue } from '@/store/useVenue'
 import { OVERVIEW } from '@/data/zones'
 import { play } from '@/lib/audio'
 
-// Real Abuja Flight Waypoints (in local metres centered at stadium [0, 0]):
+// Real Abuja Flight Waypoints starting at the Velodrome (Package A approach):
 // Origin: Moshood Abiola Stadium (lat 9.038108, lon 7.453463)
-// Aso Rock / Three Arms Zone: x ~ +8800m, z ~ -4400m
+// Velodrome Dome: x ~ -128m, z ~ -486m
 export const FLIGHT_WAYPOINTS = [
-  // 1. High altitude over Aso Rock & Three Arms Zone looking southwest towards Central Area
+  // 1. High altitude over Abuja Velodrome looking south towards the Stadium
   {
-    cam: [8800, 1050, -4400],
-    target: [6200, 140, -3100],
-    fov: 55,
+    cam: [-135, 175, -590],
+    target: [-50, 40, -140],
+    fov: 48,
     roll: 0.0,
     caption: {
-      tag: 'ABUJA LANDMARK',
-      title: 'Aso Rock & Three Arms Zone',
-      subtitle: '400m granite monolith & Presidential Complex overlooking the capital',
+      tag: 'APPROACHING VENUE',
+      title: 'Abuja Velodrome & Sports Precinct',
+      subtitle: 'Approaching Moshood Abiola National Stadium gateway',
     },
   },
-  // 2. Gliding above National Assembly towards National Mosque & Central Business District
+  // 2. Gliding south over monumental stadium gateway and North Arrival Boulevard
   {
-    cam: [6000, 750, -2900],
-    target: [4000, 90, -2000],
-    fov: 53,
-    roll: 0.035, // ~2 degrees bank
-    caption: {
-      tag: 'CENTRAL DISTRICT',
-      title: 'Central Business District',
-      subtitle: 'Golden dome of National Mosque & Central Bank of Nigeria tower',
-    },
-  },
-  // 3. Constitution Avenue corridor tracking southwest
-  {
-    cam: [3800, 520, -1800],
-    target: [1900, 60, -900],
-    fov: 50,
-    roll: -0.045, // banking into the curve
-    caption: {
-      tag: 'CEREMONIAL AXIS',
-      title: 'Constitution Avenue Corridor',
-      subtitle: 'Ceremonial arterial boulevard connecting Central Area towards the National Stadium precinct',
-    },
-  },
-  // 4. Over Umaru Musa Yar\'Adua Expressway descending past City Gate
-  {
-    cam: [1500, 310, -700],
-    target: [250, 40, -100],
+    cam: [-140, 130, -320],
+    target: [-25, 28, -20],
     fov: 46,
-    roll: 0.03,
+    roll: 0.025,
     caption: {
-      tag: 'SPORTS PRECINCT',
-      title: 'Package A & Velodrome',
-      subtitle: 'Cable-suspended velodrome dome & monumental stadium gateway',
+      tag: 'APPROACHING VENUE',
+      title: 'Package A & Stadium Gateway',
+      subtitle: 'North arrival boulevard & monumental venue approach',
     },
   },
-  // 5. Sweeping around the stadium exterior to south approach
+  // 3. Sweeping around the West facade & grandstand towards South plaza
   {
-    cam: [-80, 230, 420],
-    target: [-10, 25, 40],
-    fov: 43,
-    roll: -0.015,
+    cam: [-260, 110, 120],
+    target: [-15, 20, 30],
+    fov: 44,
+    roll: -0.02,
     caption: {
       tag: 'NATIONAL VENUE',
       title: 'Moshood Abiola National Stadium',
       subtitle: 'About 60,000-seat flagship arena • Home of TM CON 2030',
     },
   },
-  // 6. Final arrival at South Hero Overview pose from zones.js
+  // 4. Final arrival at South Hero Overview pose from zones.js
   {
     cam: OVERVIEW.cam,
     target: OVERVIEW.target,
@@ -87,7 +63,7 @@ export const FLIGHT_WAYPOINTS = [
 // Smooth S-curve cubic ease in/out per brief Section 5
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-const FLIGHT_DURATION = 18.0 // seconds
+const FLIGHT_DURATION = 8.0 // seconds
 const LIGHTS_ON_DURATION = 2.5 // seconds
 
 export default function IntroFlight() {
@@ -194,16 +170,12 @@ export default function IntroFlight() {
 
       // Landmark captions fade in as each region passes
       let activeCaption = null
-      if (p >= 0.02 && p < 0.22) {
+      if (p >= 0.02 && p < 0.36) {
         activeCaption = FLIGHT_WAYPOINTS[0].caption
-      } else if (p >= 0.22 && p < 0.44) {
+      } else if (p >= 0.36 && p < 0.70) {
         activeCaption = FLIGHT_WAYPOINTS[1].caption
-      } else if (p >= 0.44 && p < 0.68) {
+      } else if (p >= 0.70 && p < 0.99) {
         activeCaption = FLIGHT_WAYPOINTS[2].caption
-      } else if (p >= 0.68 && p < 0.88) {
-        activeCaption = FLIGHT_WAYPOINTS[3].caption
-      } else if (p >= 0.88 && p < 0.99) {
-        activeCaption = FLIGHT_WAYPOINTS[4].caption
       }
 
       if (
@@ -216,12 +188,12 @@ export default function IntroFlight() {
         setIntroProgress(u, activeCaption)
       }
 
-      // Road pulse traveling ahead of camera along expressway corridor
+      // Road pulse traveling ahead of camera along approach boulevard
       if (pulseMeshRef.current) {
-        // Pulse moves from Aso Rock (8500, -4200) to Stadium (0, 0)
+        // Pulse moves from Velodrome (-135, -590) to Stadium (0, 0)
         const pulseP = Math.min(1.0, p * 1.15 + 0.05)
-        const pulseX = THREE.MathUtils.lerp(8800, 0, pulseP)
-        const pulseZ = THREE.MathUtils.lerp(-4400, 0, pulseP)
+        const pulseX = THREE.MathUtils.lerp(-135, 0, pulseP)
+        const pulseZ = THREE.MathUtils.lerp(-590, 0, pulseP)
         pulseMeshRef.current.position.set(pulseX, 15, pulseZ)
         pulseMeshRef.current.scale.setScalar(1 + Math.sin(flightTimer.current * 6) * 0.3)
       }

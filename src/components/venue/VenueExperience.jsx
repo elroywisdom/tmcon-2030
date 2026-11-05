@@ -28,6 +28,7 @@ import {
 import InfoPanel from './InfoPanel'
 import TourHUD from './TourHUD'
 import IntroOverlay from './IntroOverlay'
+import SeatBookingModal from './SeatBookingModal'
 import SimpleViewFallback from './SimpleViewFallback'
 import './venue.css'
 
@@ -219,6 +220,7 @@ export default function VenueExperience() {
 
       {!comparisonView && !isIntroPlaying && entered && <InfoPanel />}
       {!comparisonView && !isIntroPlaying && entered && <TourHUD />}
+      {!comparisonView && !isIntroPlaying && entered && <SeatBookingModal />}
 
       {/* Neubrutalist Top Bar per TM CON 2026 Design System */}
       {!isIntroPlaying && entered && (
@@ -349,18 +351,20 @@ export default function VenueExperience() {
             <div className="camera-presets-grid">
               {CAMERA_PRESETS.map((p) => {
                 const isActive = activePreset === p.id && !activeZone && !isSeatView
+                const isArrowOnly = p.id === 'left' || p.id === 'right'
                 return (
                   <button
                     key={p.id}
-                    className={`camera-preset-btn ${isActive ? 'active' : ''}`}
+                    className={`camera-preset-btn ${isArrowOnly ? 'icon-only' : ''} ${isActive ? 'active' : ''}`}
                     onClick={() => {
                       play('whoosh')
                       setPreset(p.id)
                     }}
-                    aria-label={p.description}
+                    title={p.label}
+                    aria-label={p.description || p.label}
                   >
                     <span className="preset-icon">{getPresetIcon(p.iconKey)}</span>
-                    <span className="preset-label">{p.label}</span>
+                    {!isArrowOnly && <span className="preset-label">{p.label}</span>}
                   </button>
                 )
               })}
@@ -475,7 +479,7 @@ export default function VenueExperience() {
 
             <span className="gate-audio-note">
               <IconFloor size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-              Includes 18s cinematic flight from Aso Rock into Moshood Abiola Stadium
+              Includes cinematic drone fly-in from the Velodrome into Moshood Abiola Stadium
             </span>
           </div>
         </div>

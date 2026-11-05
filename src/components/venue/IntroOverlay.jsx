@@ -26,7 +26,7 @@ export default function IntroOverlay() {
         <div className="intro-top-content">
           <div className="intro-brand">
             <span className="intro-brand-dot" />
-            <span className="intro-brand-text">TM CON 2030 • ABUJA CORRIDOR FLIGHT</span>
+            <span className="intro-brand-text">TM CON 2030 • VENUE APPROACH FLIGHT</span>
           </div>
           <button
             className="intro-skip-btn"
@@ -81,7 +81,7 @@ export default function IntroOverlay() {
             />
           </div>
           <div className="intro-timeline-meta">
-            <span>ASO ROCK & SAVANNA</span>
+            <span>VELODROME PRECINCT</span>
             <span className="intro-timeline-indicator">
               {isLightsOn ? 'ARRIVED • STADIUM POWER ON' : 'APPROACHING VENUE'}
             </span>

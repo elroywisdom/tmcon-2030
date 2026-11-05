@@ -6,6 +6,15 @@ export const useVenue = create((set, get) => ({
   isSeatView: false, // true when camera is placed at seat height looking at stage
   hovered: null,
   selectedSeat: null, // { zoneId, index, label }
+  isBookingOpen: false,
+  setIsBookingOpen: (isBookingOpen) => set({ isBookingOpen }),
+  openBooking: (zoneId = null) => {
+    if (zoneId) {
+      set({ isBookingOpen: true, activeZone: zoneId, isSeatView: false })
+    } else {
+      set({ isBookingOpen: true, isSeatView: false })
+    }
+  },
   entered: false,
   isTouring: false,
   tourStep: 0,

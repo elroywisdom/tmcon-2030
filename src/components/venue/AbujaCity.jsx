@@ -115,11 +115,23 @@ export default function AbujaCity() {
           fetch('/city/streetlights.json').then((r) => r.json()),
           fetch('/city/traffic.json').then((r) => r.json()),
         ])
+        // Filter traffic to strictly exclude paths passing through the stadium complex (r < 250m)
+        const safeTraffic = (tRes || []).filter((car) => {
+          if (!car.p1 || !car.p2) return false
+          const ax = car.p1[0], az = car.p1[2]
+          const bx = car.p2[0], bz = car.p2[2]
+          const l2 = (bx - ax) ** 2 + (bz - az) ** 2
+          let t = l2 > 0 ? -((ax * (bx - ax)) + (az * (bz - az))) / l2 : 0
+          t = Math.max(0, Math.min(1, t))
+          const dist = Math.hypot(ax + t * (bx - ax), az + t * (bz - az))
+          return dist >= 250
+        })
+
         if (active) {
           setCityData({
             buildings: bRes,
             streetlights: lRes,
-            traffic: tRes,
+            traffic: safeTraffic,
           })
         }
       } catch (err) {
