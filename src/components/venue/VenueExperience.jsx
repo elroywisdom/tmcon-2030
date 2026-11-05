@@ -401,7 +401,7 @@ export default function VenueExperience() {
           <div className="gate-card gate-orange-poster outlined-block">
             <div className="gate-header-strip">
               <span className="gate-eyebrow-pill">PORTFOLIO DEMO</span>
-              <span className="gate-edition-pill">SIDE PROJECT</span>
+              <span className="gate-edition-pill">SIMULATION</span>
             </div>
             <div className="gate-brand-banner">
               <img
