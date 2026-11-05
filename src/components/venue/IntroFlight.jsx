@@ -10,37 +10,49 @@ import { useVenue } from '@/store/useVenue'
 import { OVERVIEW } from '@/data/zones'
 import { play } from '@/lib/audio'
 
-// Real Abuja Flight Waypoints starting at the Velodrome (Package A approach):
+// Real Abuja Flight Waypoints starting 300m back from the Velodrome (Package A approach):
 // Origin: Moshood Abiola Stadium (lat 9.038108, lon 7.453463)
 // Velodrome Dome: x ~ -128m, z ~ -486m
 export const FLIGHT_WAYPOINTS = [
-  // 1. High altitude over Abuja Velodrome looking south towards the Stadium
+  // 1. High altitude 300m back from Velodrome looking south towards the Stadium
   {
-    cam: [-135, 175, -590],
-    target: [-50, 40, -140],
-    fov: 48,
+    cam: [-140, 210, -890],
+    target: [-80, 50, -380],
+    fov: 50,
     roll: 0.0,
     caption: {
       tag: 'APPROACHING VENUE',
-      title: 'Abuja Velodrome & Sports Precinct',
-      subtitle: 'Approaching Moshood Abiola National Stadium gateway',
+      title: 'Package A & Velodrome Approach',
+      subtitle: 'North flight corridor approaching Moshood Abiola National Stadium',
     },
   },
-  // 2. Gliding south over monumental stadium gateway and North Arrival Boulevard
+  // 2. Gliding directly over the iconic Velodrome dome
   {
-    cam: [-140, 130, -320],
-    target: [-25, 28, -20],
+    cam: [-135, 160, -560],
+    target: [-50, 38, -140],
+    fov: 48,
+    roll: 0.015,
+    caption: {
+      tag: 'ABUJA PRECINCT',
+      title: 'Abuja Velodrome & Sports Precinct',
+      subtitle: 'Geodesic cable-suspended dome & gateway boulevard',
+    },
+  },
+  // 3. Gliding south over monumental stadium gateway and North Arrival Boulevard
+  {
+    cam: [-145, 125, -280],
+    target: [-25, 26, -10],
     fov: 46,
     roll: 0.025,
     caption: {
-      tag: 'APPROACHING VENUE',
+      tag: 'VENUE GATEWAY',
       title: 'Package A & Stadium Gateway',
       subtitle: 'North arrival boulevard & monumental venue approach',
     },
   },
-  // 3. Sweeping around the West facade & grandstand towards South plaza
+  // 4. Sweeping around the West facade & grandstand towards South plaza
   {
-    cam: [-260, 110, 120],
+    cam: [-265, 115, 115],
     target: [-15, 20, 30],
     fov: 44,
     roll: -0.02,
@@ -50,7 +62,7 @@ export const FLIGHT_WAYPOINTS = [
       subtitle: 'About 60,000-seat flagship arena • Home of TM CON 2030',
     },
   },
-  // 4. Final arrival at South Hero Overview pose from zones.js
+  // 5. Final arrival at South Hero Overview pose from zones.js
   {
     cam: OVERVIEW.cam,
     target: OVERVIEW.target,
@@ -63,7 +75,7 @@ export const FLIGHT_WAYPOINTS = [
 // Smooth S-curve cubic ease in/out per brief Section 5
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-const FLIGHT_DURATION = 8.0 // seconds
+const FLIGHT_DURATION = 13.0 // seconds (smooth majestic pace)
 const LIGHTS_ON_DURATION = 2.5 // seconds
 
 export default function IntroFlight() {
@@ -78,7 +90,6 @@ export default function IntroFlight() {
 
   const flightTimer = useRef(0)
   const lightsTimer = useRef(0)
-  const pulseMeshRef = useRef()
   const rimSweepMeshRef = useRef()
   const lastIntroU = useRef(-1)
   const lastActiveCaption = useRef(null)
@@ -170,12 +181,14 @@ export default function IntroFlight() {
 
       // Landmark captions fade in as each region passes
       let activeCaption = null
-      if (p >= 0.02 && p < 0.36) {
+      if (p >= 0.02 && p < 0.26) {
         activeCaption = FLIGHT_WAYPOINTS[0].caption
-      } else if (p >= 0.36 && p < 0.70) {
+      } else if (p >= 0.26 && p < 0.52) {
         activeCaption = FLIGHT_WAYPOINTS[1].caption
-      } else if (p >= 0.70 && p < 0.99) {
+      } else if (p >= 0.52 && p < 0.78) {
         activeCaption = FLIGHT_WAYPOINTS[2].caption
+      } else if (p >= 0.78 && p < 0.99) {
+        activeCaption = FLIGHT_WAYPOINTS[3].caption
       }
 
       if (
@@ -186,16 +199,6 @@ export default function IntroFlight() {
         lastIntroU.current = u
         lastActiveCaption.current = activeCaption
         setIntroProgress(u, activeCaption)
-      }
-
-      // Road pulse traveling ahead of camera along approach boulevard
-      if (pulseMeshRef.current) {
-        // Pulse moves from Velodrome (-135, -590) to Stadium (0, 0)
-        const pulseP = Math.min(1.0, p * 1.15 + 0.05)
-        const pulseX = THREE.MathUtils.lerp(-135, 0, pulseP)
-        const pulseZ = THREE.MathUtils.lerp(-590, 0, pulseP)
-        pulseMeshRef.current.position.set(pulseX, 15, pulseZ)
-        pulseMeshRef.current.scale.setScalar(1 + Math.sin(flightTimer.current * 6) * 0.3)
       }
 
       // Reached destination overview pose: transition to lights-on moment
@@ -256,14 +259,6 @@ export default function IntroFlight() {
 
   return (
     <group name="intro-flight-effects">
-      {/* Luminous pulse wave traveling ahead of camera along the expressway */}
-      {introPhase === 'flight' && (
-        <mesh ref={pulseMeshRef} position={[8800, 15, -4400]}>
-          <sphereGeometry args={[45, 16, 16]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.85} />
-        </mesh>
-      )}
-
       {/* 360-degree light sweep bead running around inner roof cable rim */}
       {introPhase === 'lights_on' && (
         <mesh ref={rimSweepMeshRef} visible={false}>

@@ -415,6 +415,99 @@ button:active,
   pointer-events: auto;
 }
 
+/* ==========================================================================
+   Animated Entrances for Post-Intro Revealed Panels
+   ========================================================================== */
+.top-bar.animate-in {
+  animation: topBarSlideDown 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes topBarSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.camera-presets-dock.animate-in {
+  animation: presetsSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes presetsSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 36px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.panel.animate-in {
+  animation: panelSlideInDesktop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes panelSlideInDesktop {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .panel.animate-in {
+    animation: panelSlideInMobile 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes panelSlideInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.panel-expand-btn.animate-in {
+  animation: expandBtnSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes expandBtnSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.orbit-hint.animate-in,
+.osm-attribution.animate-in {
+  animation: uiHintFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes uiHintFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .panel::-webkit-scrollbar {
   width: 6px;
 }

@@ -78,7 +78,7 @@ export default function InfoPanel() {
       {/* Floating Expand Tab when Panel is Collapsed */}
       {collapsed && (
         <button
-          className="panel-expand-btn outlined-block"
+          className="panel-expand-btn outlined-block animate-in"
           onClick={() => {
             play('click')
             setCollapsed(false)
@@ -92,7 +92,7 @@ export default function InfoPanel() {
       )}
 
       <aside
-        className={`panel outlined-block ${collapsed ? 'is-collapsed' : ''}`}
+        className={`panel outlined-block animate-in ${collapsed ? 'is-collapsed' : ''}`}
         style={{ '--accent': zone?.color || 'var(--orange)' }}
         aria-live="polite"
         aria-hidden={collapsed}

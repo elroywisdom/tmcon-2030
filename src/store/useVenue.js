@@ -35,6 +35,8 @@ export const useVenue = create((set, get) => ({
   lightsOnProgress: 0,
   introCaption: null,
   soundEnabled: true,
+  isUiRevealed: false,
+  setIsUiRevealed: (isUiRevealed) => set({ isUiRevealed }),
 
   focusZone: (id) =>
     set({ activeZone: id, isTouring: false, isSeatView: false, activePreset: null }),
@@ -68,6 +70,7 @@ export const useVenue = create((set, get) => ({
       activeZone: null,
       isTouring: false,
       timeOfDay: 'night',
+      isUiRevealed: false,
     })
   },
   setIntroProgress: (progress, caption) => {
@@ -79,7 +82,12 @@ export const useVenue = create((set, get) => ({
     }
   },
   startLightsOn: () =>
-    set({ introPhase: 'lights_on', introProgress: 1.0, lightsOnProgress: 0 }),
+    set({
+      introPhase: 'lights_on',
+      introProgress: 1.0,
+      lightsOnProgress: 0,
+      liveShow: true,
+    }),
   setLightsOnProgress: (prog) => set({ lightsOnProgress: prog }),
   completeIntro: () => {
     if (typeof window !== 'undefined') {
@@ -93,7 +101,13 @@ export const useVenue = create((set, get) => ({
       introProgress: 1.0,
       lightsOnProgress: 1.0,
       introCaption: null,
+      liveShow: true,
+      isUiRevealed: false,
     })
+    // Give user a clean 1.4s window to take in the active stadium live show before animating in panels
+    setTimeout(() => {
+      set({ isUiRevealed: true })
+    }, 1400)
   },
   skipIntro: () => {
     if (typeof window !== 'undefined') {
@@ -109,6 +123,8 @@ export const useVenue = create((set, get) => ({
       introCaption: null,
       activeZone: null,
       isTouring: false,
+      liveShow: true,
+      isUiRevealed: true,
     })
   },
   replayIntro: () => {

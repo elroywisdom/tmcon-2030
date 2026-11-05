@@ -83,6 +83,7 @@ export default function VenueExperience() {
   const setViewFromSeat = useVenue((s) => s.setViewFromSeat)
   const activePreset = useVenue((s) => s.activePreset)
   const setPreset = useVenue((s) => s.setPreset)
+  const isUiRevealed = useVenue((s) => s.isUiRevealed)
 
   const [muted, setMutedState] = useState(false)
   const [comparisonView, setComparisonView] = useState(null)
@@ -218,13 +219,13 @@ export default function VenueExperience() {
       {/* Cinematic Intro Overlay (letterbox, progress bar, captions, skip) */}
       <IntroOverlay />
 
-      {!comparisonView && !isIntroPlaying && entered && <InfoPanel />}
-      {!comparisonView && !isIntroPlaying && entered && <TourHUD />}
-      {!comparisonView && !isIntroPlaying && entered && <SeatBookingModal />}
+      {!comparisonView && !isIntroPlaying && entered && isUiRevealed && <InfoPanel />}
+      {!comparisonView && !isIntroPlaying && entered && isUiRevealed && <TourHUD />}
+      {!comparisonView && !isIntroPlaying && entered && isUiRevealed && <SeatBookingModal />}
 
       {/* Neubrutalist Top Bar per TM CON 2026 Design System */}
-      {!isIntroPlaying && entered && (
-        <header className="top-bar">
+      {!isIntroPlaying && entered && isUiRevealed && (
+        <header className="top-bar animate-in">
           <div className="nav-brand-cluster">
             <img
               src="/brand/TMCON-logo-Black.svg"
@@ -344,8 +345,8 @@ export default function VenueExperience() {
       )}
 
       {/* Floating Camera Presets Dock (Phase 4 Section 7 & P1 UI Quality) */}
-      {!comparisonView && !isIntroPlaying && entered && (
-        <aside className="camera-presets-dock" aria-label="Camera Presets">
+      {!comparisonView && !isIntroPlaying && entered && isUiRevealed && (
+        <aside className="camera-presets-dock animate-in" aria-label="Camera Presets">
           <div className="camera-presets-wrapper outlined-block">
             <span className="camera-presets-tag">CAMERA</span>
             <div className="camera-presets-grid">
@@ -374,8 +375,8 @@ export default function VenueExperience() {
       )}
 
       {/* Helper navigation hint in overview */}
-      {!comparisonView && !isTouring && entered && !isSeatView && (
-        <div className="orbit-hint">
+      {!comparisonView && !isTouring && entered && !isSeatView && !isIntroPlaying && isUiRevealed && (
+        <div className="orbit-hint animate-in">
           <span>
             Drag to orbit • Scroll to zoom • Click any zone or seat to focus
           </span>
@@ -403,9 +404,11 @@ export default function VenueExperience() {
       )}
 
       {/* Visible Required OpenStreetMap Attribution */}
-      <div className="osm-attribution">
-        <span>{EVENT_DETAILS.osmAttribution}</span>
-      </div>
+      {entered && !isIntroPlaying && isUiRevealed && (
+        <div className="osm-attribution animate-in">
+          <span>{EVENT_DETAILS.osmAttribution}</span>
+        </div>
+      )}
 
       {/* Entry Gate - Neubrutalist Orange Poster per Design System */}
       {!entered && !comparisonView && (
