@@ -525,17 +525,31 @@ function LandmarkBeacon({ position, isNight, color }) {
  * eliminating the black void under Aso Rock, National Mosque, and CBN.
  */
 function RegionalSavannaTerrain({ isNight }) {
-  // Coarse displaced rolling topography for the broader Abuja Federal Capital Territory
+  // Displaced rolling topography for the broader Abuja Federal Capital Territory
+  // Seamlessly supports distant landmarks & flight corridor while strictly dipping
+  // below the stadium complex (r < 1800m) so it never clips or obscures the pitch/bowl.
   const regionalTerrainGeo = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(36000, 36000, 32, 32)
+    const geo = new THREE.PlaneGeometry(36000, 36000, 64, 64)
     const pos = geo.attributes.position
     for (let i = 0; i < pos.count; i++) {
       const vx = pos.getX(i)
       const vy = pos.getY(i)
-      // Natural low undulating topography (valleys and ridges)
-      const elevation =
-        Math.sin(vx * 0.0006) * Math.cos(vy * 0.0007) * 42 +
-        Math.sin(vx * 0.0018 + vy * 0.0014) * 22
+
+      // Calculate world coordinates given mesh position [4500, -3.8, -2500]
+      const worldX = 4500 + vx
+      const worldZ = -2500 - vy
+      const distToStadium = Math.hypot(worldX, worldZ)
+
+      // Natural rolling topography for distant savanna & hills near landmarks
+      const naturalElevation =
+        Math.sin(vx * 0.0006) * Math.cos(vy * 0.0007) * 36 +
+        Math.sin(vx * 0.0018 + vy * 0.0014) * 18
+
+      // Crucial: Smoothly suppress elevation near the stadium (r < 1800m)
+      // and keep the regional terrain safely below the stadium ground (y = 0)
+      const stadiumDamp = THREE.MathUtils.smoothstep(distToStadium, 1600, 3200)
+      const elevation = naturalElevation * stadiumDamp - (1 - stadiumDamp) * 6
+
       pos.setZ(i, elevation)
     }
     geo.computeVertexNormals()
@@ -548,12 +562,12 @@ function RegionalSavannaTerrain({ isNight }) {
       <mesh
         geometry={regionalTerrainGeo}
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[4500, -1.2, -2500]}
+        position={[4500, -3.8, -2500]}
         receiveShadow
         raycast={() => null}
       >
         <meshStandardMaterial
-          color={isNight ? '#0a0d0d' : '#baaa94'}
+          color={isNight ? '#0a0d0d' : '#6b7d4c'}
           roughness={0.95}
           metalness={0.02}
         />
@@ -562,13 +576,13 @@ function RegionalSavannaTerrain({ isNight }) {
       {/* 2. Central Business District (CBD) Urban Ground Pad (Asphalt & Paved Parcels) */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[4600, -0.4, -2200]}
+        position={[4600, -1.8, -2200]}
         receiveShadow
         raycast={() => null}
       >
         <planeGeometry args={[7500, 5200]} />
         <meshStandardMaterial
-          color={isNight ? '#101317' : '#9a9488'}
+          color={isNight ? '#101317' : '#52595f'}
           roughness={0.88}
         />
       </mesh>
