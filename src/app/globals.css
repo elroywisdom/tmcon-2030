@@ -1,0 +1,123 @@
+/* Local font definition for Bai Jamjuree from public/fonts/Bai_Jamjuree */
+@font-face {
+  font-family: 'Bai Jamjuree';
+  src: url('/fonts/Bai_Jamjuree/BaiJamjuree-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bai Jamjuree';
+  src: url('/fonts/Bai_Jamjuree/BaiJamjuree-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bai Jamjuree';
+  src: url('/fonts/Bai_Jamjuree/BaiJamjuree-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bai Jamjuree';
+  src: url('/fonts/Bai_Jamjuree/BaiJamjuree-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand Colors from tokens.js */
+  --orange: #f2680b;
+  --orange-75: #f58e48;
+  --orange-50: #f9b485;
+  --orange-25: #fcd9c2;
+
+  --navy: #3b345b;
+  --navy-75: #6c6784;
+  --navy-50: #9d9aad;
+  --navy-25: #ceccd6;
+
+  --green: #03c280;
+  --green-75: #42d1a0;
+  --green-50: #81e1c0;
+  --green-25: #c0f0df;
+
+  --lavender: #eaa2ec;
+  --lavender-75: #efb9f1;
+  --lavender-50: #f5d1f6;
+  --lavender-25: #fae8fa;
+
+  --cream: #fff7f2;
+  --ink: #000000;
+  --canvas: #ffffff;
+  --error-red: #e03131;
+  --error-red-light: #ffe3e3;
+
+  /* Shape, Outline & Depth */
+  --outline: 3px;
+  --outline-sm: 2px;
+  --shadow-lg: 6px;
+  --shadow-md: 4px;
+  --shadow-sm: 3px;
+
+  --radius-pill: 999px;
+  --radius-card: 16px;
+  --radius-photo: 24px;
+  --radius-rect: 0px;
+
+  /* Spacing Grid (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Motion */
+  --dur-press: 80ms;
+  --dur-ui: 180ms;
+  --dur-panel: 260ms;
+  --ease-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Typography */
+  --font-family: 'Bai Jamjuree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--navy);
+  color: var(--ink);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Neubrutalist Outlined Block Utility */
+.outlined-block {
+  border: var(--outline) solid var(--ink);
+  box-shadow: var(--shadow-md) var(--shadow-md) 0 var(--ink);
+  transition: transform var(--dur-press) var(--ease-ui), box-shadow var(--dur-press) var(--ease-ui);
+}
+
+.outlined-block:active {
+  transform: translate(var(--shadow-md), var(--shadow-md));
+  box-shadow: 0 0 0 var(--ink);
+}

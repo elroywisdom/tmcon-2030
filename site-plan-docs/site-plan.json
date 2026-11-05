@@ -1,0 +1,504 @@
+{
+  "about": "Approximate site plan of Moshood Abiola National Stadium, Abuja, measured by eye from a Google Earth screenshot (200 m scale bar = 289 px) and checked against OSM. Reference only. Use OSM for exact geometry.",
+  "units": "metres",
+  "origin": "stadium centre (OSM centroid about 9.0381 N, 7.4535 E)",
+  "axes": "+x east, +z south, +y up. North is up in the drawing.",
+  "accuracy": "high = matches OSM, medium = about +/-20 m, low = about +/-40 m or shape only",
+  "features": [
+    {
+      "id": "apron",
+      "label": "Paved apron",
+      "kind": "apron",
+      "shape": "ellipse",
+      "center": [
+        0,
+        0
+      ],
+      "radii": [
+        155,
+        188
+      ],
+      "rotation_deg": 0,
+      "confidence": "medium",
+      "notes": "Dark grey concrete ring around the stadium. Ticket booths and portacabins sit on it.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "stadium_outer",
+      "label": "Stadium (roof outer edge)",
+      "kind": "stadium",
+      "shape": "ellipse",
+      "center": [
+        0,
+        0
+      ],
+      "radii": [
+        119,
+        144
+      ],
+      "rotation_deg": 0,
+      "confidence": "high",
+      "notes": "Matches the OSM bowl outline (about 238 x 288 m). Use the real OSM polygon for the final shape.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "roof_opening",
+      "label": "Roof opening",
+      "kind": "roof_opening",
+      "shape": "ellipse",
+      "center": [
+        0,
+        0
+      ],
+      "radii": [
+        65,
+        80
+      ],
+      "rotation_deg": 0,
+      "confidence": "medium",
+      "notes": "About 0.55 of the outer scale. Steel ring truss with floodlights hangs on this edge.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "track",
+      "label": "Athletics track (outer edge)",
+      "kind": "track",
+      "shape": "ellipse",
+      "center": [
+        0,
+        0
+      ],
+      "radii": [
+        62,
+        92
+      ],
+      "rotation_deg": -16,
+      "confidence": "medium",
+      "notes": "Terracotta track. Long axis about 16 degrees off north-south (top leans west), taken from the OSM pitch polygon.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "pitch",
+      "label": "Football pitch",
+      "kind": "pitch",
+      "shape": "rect",
+      "center": [
+        0,
+        0
+      ],
+      "size": [
+        70,
+        108
+      ],
+      "rotation_deg": -16,
+      "confidence": "medium",
+      "notes": "Same tilt as the track. Check the exact polygon in the OSM data.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "booth_ring",
+      "label": "Ticket booths and portacabins",
+      "kind": "booth_ring",
+      "shape": "ring",
+      "center": [
+        0,
+        0
+      ],
+      "radii": [
+        144,
+        176
+      ],
+      "count": 44,
+      "element_size": [
+        8,
+        4
+      ],
+      "confidence": "medium",
+      "notes": "About 40 to 48 small white boxes and canopies evenly spaced on the outer apron, denser on the south front.",
+      "distance_from_centre_m": 0,
+      "bearing_deg_from_north": 0
+    },
+    {
+      "id": "gate_canopies",
+      "label": "Turnstile canopies (south entrance)",
+      "kind": "booth_ring",
+      "shape": "rects",
+      "centers": [
+        [
+          18,
+          215
+        ],
+        [
+          38,
+          215
+        ],
+        [
+          58,
+          215
+        ],
+        [
+          78,
+          215
+        ]
+      ],
+      "element_size": [
+        14,
+        6
+      ],
+      "confidence": "low",
+      "notes": "Four white flat canopies in front of the south facade, on the avenue axis.",
+      "distance_from_centre_m": 220,
+      "bearing_deg_from_north": 167
+    },
+    {
+      "id": "south_avenue",
+      "label": "South avenue and gate plaza",
+      "kind": "apron",
+      "shape": "polygon",
+      "points": [
+        [
+          -21,
+          190
+        ],
+        [
+          118,
+          190
+        ],
+        [
+          131,
+          349
+        ],
+        [
+          62,
+          349
+        ]
+      ],
+      "confidence": "medium",
+      "notes": "Wide paved approach from the south, narrowing toward a bridge or underpass at the south highway. Main fan arrival route.",
+      "distance_from_centre_m": 279,
+      "bearing_deg_from_north": 165
+    },
+    {
+      "id": "parking_west",
+      "label": "Terraced car park, west",
+      "kind": "parking",
+      "shape": "rect",
+      "center": [
+        -188,
+        -62
+      ],
+      "size": [
+        135,
+        145
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Terraces with tree rows between them. Use the OSM amenity=parking polygons for exact shapes.",
+      "distance_from_centre_m": 198,
+      "bearing_deg_from_north": 288
+    },
+    {
+      "id": "parking_southwest",
+      "label": "Terraced car park, south-west",
+      "kind": "parking",
+      "shape": "rect",
+      "center": [
+        -114,
+        142
+      ],
+      "size": [
+        172,
+        124
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Large terraced lot with tree rows.",
+      "distance_from_centre_m": 182,
+      "bearing_deg_from_north": 219
+    },
+    {
+      "id": "parking_east",
+      "label": "Car park, east",
+      "kind": "parking",
+      "shape": "rect",
+      "center": [
+        209,
+        -50
+      ],
+      "size": [
+        100,
+        280
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Long paved lot east of the apron, with tree rows along the terraces.",
+      "distance_from_centre_m": 215,
+      "bearing_deg_from_north": 77
+    },
+    {
+      "id": "round_building",
+      "label": "Round building (radial roof, open courtyard)",
+      "kind": "landmark",
+      "shape": "circle",
+      "center": [
+        -143,
+        45
+      ],
+      "radius": 26,
+      "courtyard_radius": 7,
+      "spokes": 16,
+      "confidence": "high",
+      "notes": "OSM way 1046913215. Do not label it as a velodrome or expo pavilion until verified.",
+      "distance_from_centre_m": 150,
+      "bearing_deg_from_north": 253
+    },
+    {
+      "id": "roundabout",
+      "label": "Roundabout garden (star paths)",
+      "kind": "landmark",
+      "shape": "circle",
+      "center": [
+        -223,
+        52
+      ],
+      "radius": 22,
+      "courtyard_radius": 13,
+      "spokes": 5,
+      "confidence": "medium",
+      "notes": "Circular road around a garden, with paths radiating. Flagpoles near the centre.",
+      "distance_from_centre_m": 229,
+      "bearing_deg_from_north": 257
+    },
+    {
+      "id": "helipad",
+      "label": "Helipad",
+      "kind": "landmark",
+      "shape": "circle",
+      "center": [
+        -306,
+        31
+      ],
+      "radius": 20,
+      "spokes": 0,
+      "confidence": "medium",
+      "notes": "Round concrete pad on a path from the roundabout.",
+      "distance_from_centre_m": 308,
+      "bearing_deg_from_north": 264
+    },
+    {
+      "id": "tent_arena",
+      "label": "White tensile-roof arena (tall masts)",
+      "kind": "landmark",
+      "shape": "circle",
+      "center": [
+        429,
+        -131
+      ],
+      "radius": 62,
+      "masts": 6,
+      "confidence": "medium",
+      "notes": "Faceted white fabric roof with tall masts. Do not label its function until verified.",
+      "distance_from_centre_m": 449,
+      "bearing_deg_from_north": 73
+    },
+    {
+      "id": "training_track",
+      "label": "Training pitch and track",
+      "kind": "training_track",
+      "shape": "ellipse",
+      "center": [
+        66,
+        -294
+      ],
+      "radii": [
+        60,
+        83
+      ],
+      "rotation_deg": 0,
+      "confidence": "medium",
+      "notes": "Terracotta track around a grass pitch, north-north-east of the stadium.",
+      "distance_from_centre_m": 301,
+      "bearing_deg_from_north": 13
+    },
+    {
+      "id": "warmup_field",
+      "label": "Throwing and warm-up fields (sandy)",
+      "kind": "field",
+      "shape": "rect",
+      "center": [
+        -87,
+        -263
+      ],
+      "size": [
+        180,
+        131
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Dry sandy and patchy grass fields.",
+      "distance_from_centre_m": 277,
+      "bearing_deg_from_north": 342
+    },
+    {
+      "id": "gym_building",
+      "label": "Gymnastics building",
+      "kind": "building",
+      "shape": "rect",
+      "center": [
+        329,
+        183
+      ],
+      "size": [
+        40,
+        25
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Labelled TIG Gymnastics Abuja on the map.",
+      "distance_from_centre_m": 376,
+      "bearing_deg_from_north": 119
+    },
+    {
+      "id": "blue_roof_building",
+      "label": "Building with blue roof (unlabelled)",
+      "kind": "building",
+      "shape": "rect",
+      "center": [
+        360,
+        73
+      ],
+      "size": [
+        48,
+        41
+      ],
+      "rotation_deg": 0,
+      "confidence": "low",
+      "notes": "Check OSM tags before labelling.",
+      "distance_from_centre_m": 367,
+      "bearing_deg_from_north": 101
+    },
+    {
+      "id": "housing_strip",
+      "label": "Orange-roofed housing (doctors quarters)",
+      "kind": "housing",
+      "shape": "rect",
+      "center": [
+        630,
+        -250
+      ],
+      "size": [
+        110,
+        190
+      ],
+      "rotation_deg": -25,
+      "confidence": "low",
+      "notes": "Row of low orange-roofed houses in the far north-east.",
+      "distance_from_centre_m": 678,
+      "bearing_deg_from_north": 68
+    },
+    {
+      "id": "highway_west",
+      "label": "West ring highway",
+      "kind": "road",
+      "shape": "polyline",
+      "points": [
+        [
+          -491,
+          -211
+        ],
+        [
+          -440,
+          -110
+        ],
+        [
+          -394,
+          -10
+        ],
+        [
+          -374,
+          107
+        ],
+        [
+          -318,
+          211
+        ],
+        [
+          -180,
+          384
+        ]
+      ],
+      "width": 12,
+      "confidence": "low",
+      "notes": "Wide dual carriageway looping around the west. Use OSM highway ways for exact geometry.",
+      "distance_from_centre_m": 371,
+      "bearing_deg_from_north": 260
+    },
+    {
+      "id": "highway_south",
+      "label": "South highway",
+      "kind": "road",
+      "shape": "polyline",
+      "points": [
+        [
+          -520,
+          308
+        ],
+        [
+          -250,
+          340
+        ],
+        [
+          97,
+          352
+        ],
+        [
+          443,
+          246
+        ],
+        [
+          720,
+          185
+        ]
+      ],
+      "width": 12,
+      "confidence": "low",
+      "notes": "Main road passing south of the site. The south avenue meets it at a bridge or underpass.",
+      "distance_from_centre_m": 303,
+      "bearing_deg_from_north": 161
+    },
+    {
+      "id": "highway_east",
+      "label": "East dual carriageway",
+      "kind": "road",
+      "shape": "polyline",
+      "points": [
+        [
+          415,
+          -440
+        ],
+        [
+          512,
+          -273
+        ],
+        [
+          650,
+          -66
+        ],
+        [
+          720,
+          20
+        ]
+      ],
+      "width": 12,
+      "confidence": "low",
+      "notes": "Runs north-north-west to south-south-east on the east side.",
+      "distance_from_centre_m": 605,
+      "bearing_deg_from_north": 72
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "asoRock": {
+    "center": [
+      9078,
+      0,
+      -4675
+    ],
+    "height": 400,
+    "radiusX": 1100,
+    "radiusZ": 750
+  },
+  "hills": [
+    {
+      "name": "Katampe Hill",
+      "center": [
+        3200,
+        0,
+        -5600
+      ],
+      "height": 180,
+      "radius": 600
+    },
+    {
+      "name": "Mpape Ridge",
+      "center": [
+        6800,
+        0,
+        -6200
+      ],
+      "height": 210,
+      "radius": 750
+    },
+    {
+      "name": "Mabushi Ridge",
+      "center": [
+        1800,
+        0,
+        -3200
+      ],
+      "height": 120,
+      "radius": 500
+    }
+  ]
+}
