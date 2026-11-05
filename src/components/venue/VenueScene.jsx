@@ -177,14 +177,14 @@ function EnvironmentLighting() {
         intensity={2.25}
         color={tokens.lighting.daySun}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-165}
         shadow-camera-right={165}
         shadow-camera-top={165}
         shadow-camera-bottom={-165}
         shadow-camera-near={20}
         shadow-camera-far={520}
-        shadow-bias={-0.0004}
+        shadow-bias={-0.0003}
       />
 
       {/* Cool Soft Moon Light (Night only) */}
@@ -198,7 +198,125 @@ function EnvironmentLighting() {
   )
 }
 
-// Flies the camera to the active zone, tour step, or requested comparison view.
+// Determines if a point is within the interior bowl of the stadium
+function isInsideStadiumBowl(p) {
+  const dist = Math.hypot(p.x, p.z - 15)
+  return dist < 82 && p.y < 46
+}
+
+// Distance from point P(x, z) to line segment AB(x, z)
+function distToSegment2D(px, pz, ax, az, bx, bz) {
+  const l2 = (bx - ax) ** 2 + (bz - az) ** 2
+  if (l2 === 0) return Math.hypot(px - ax, pz - az)
+  let t = ((px - ax) * (bx - ax) + (pz - az) * (bz - az)) / l2
+  t = Math.max(0, Math.min(1, t))
+  return Math.hypot(px - (ax + t * (bx - ax)), pz - (az + t * (bz - az)))
+}
+
+// Computes a realistic, obstacle-avoiding 3D trajectory for camera transitions
+// Prevents camera from passing through stadium roof, grandstand canopy, or pitch structures
+function buildRealisticFlightTrajectory(startPos, startTarget, endPos, endTarget) {
+  const startInBowl = isInsideStadiumBowl(startPos)
+  const endInBowl = isInsideStadiumBowl(endPos)
+  const dist = startPos.distanceTo(endPos)
+
+  // 1. Outside -> Inside the Bowl (e.g. Overview -> Stage, Overview -> VIP, Car Park -> Floor)
+  // Flies to high apex, passes into the bowl through the central open oculus (y ~ 54m), then descends
+  if (!startInBowl && endInBowl) {
+    const apexX = THREE.MathUtils.lerp(startPos.x, 0, 0.55)
+    const apexY = Math.max(startPos.y * 0.65, 72)
+    const apexZ = 15 + THREE.MathUtils.lerp(startPos.z - 15, 0, 0.55)
+
+    const oculusX = endPos.x * 0.4
+    const oculusY = Math.max(endPos.y + 30, 52)
+    const oculusZ = 15 + (endPos.z - 15) * 0.4
+
+    return {
+      duration: Math.min(1.8, Math.max(1.3, dist * 0.0035)),
+      curve: new THREE.CatmullRomCurve3(
+        [
+          startPos.clone(),
+          new THREE.Vector3(apexX, apexY, apexZ),
+          new THREE.Vector3(oculusX, oculusY, oculusZ),
+          endPos.clone(),
+        ],
+        false,
+        'centripetal'
+      ),
+    }
+  }
+
+  // 2. Inside the Bowl -> Outside (e.g. Stage -> Overview, VIP -> Car Park)
+  // Lifts up through open oculus, clears the 42m roof canopy, then glides across sky to overview
+  if (startInBowl && !endInBowl) {
+    const oculusX = startPos.x * 0.35
+    const oculusY = 68
+    const oculusZ = 15 + (startPos.z - 15) * 0.35
+
+    const skyX = THREE.MathUtils.lerp(startPos.x, endPos.x, 0.6)
+    const skyY = Math.max(endPos.y * 0.75, 76)
+    const skyZ = THREE.MathUtils.lerp(startPos.z, endPos.z, 0.6)
+
+    return {
+      duration: Math.min(1.8, Math.max(1.3, dist * 0.0035)),
+      curve: new THREE.CatmullRomCurve3(
+        [
+          startPos.clone(),
+          new THREE.Vector3(oculusX, oculusY, oculusZ),
+          new THREE.Vector3(skyX, skyY, skyZ),
+          endPos.clone(),
+        ],
+        false,
+        'centripetal'
+      ),
+    }
+  }
+
+  // 3. Inside -> Inside across the bowl (e.g. Left Stand <-> Right Stand, Stage <-> Scoreboard, VIP <-> Premium)
+  // Arcs upward like a broadcast Spidercam / cable-cam over the pitch, avoiding stage trusses and sound booths
+  if (startInBowl && endInBowl) {
+    if (dist > 35) {
+      const midX = (startPos.x + endPos.x) * 0.5
+      const midY = Math.max(startPos.y, endPos.y) + 26
+      const midZ = (startPos.z + endPos.z) * 0.5 - 12
+      return {
+        duration: 1.35,
+        curve: new THREE.CatmullRomCurve3(
+          [startPos.clone(), new THREE.Vector3(midX, midY, midZ), endPos.clone()],
+          false,
+          'centripetal'
+        ),
+      }
+    }
+  }
+
+  // 4. Outside -> Outside across the stadium (e.g. Car Park -> Vendor Village)
+  // Soars over the stadium roof if straight path cuts through stadium footprint
+  if (!startInBowl && !endInBowl) {
+    const distToCenter = distToSegment2D(0, 15, startPos.x, startPos.z, endPos.x, endPos.z)
+    if (distToCenter < 145 && Math.min(startPos.y, endPos.y) < 70) {
+      const midX = (startPos.x + endPos.x) * 0.5
+      const midY = Math.max(startPos.y, endPos.y, 85)
+      const midZ = (startPos.z + endPos.z) * 0.5
+      return {
+        duration: Math.min(2.0, Math.max(1.4, dist * 0.0035)),
+        curve: new THREE.CatmullRomCurve3(
+          [startPos.clone(), new THREE.Vector3(midX, midY, midZ), endPos.clone()],
+          false,
+          'centripetal'
+        ),
+      }
+    }
+  }
+
+  // Fallback: Direct smooth spline
+  return {
+    duration: 1.0,
+    curve: new THREE.CatmullRomCurve3([startPos.clone(), endPos.clone()], false, 'centripetal'),
+  }
+}
+
+// Flies the camera to the active zone, tour step, or requested preset along obstacle-avoiding paths
 function CameraRig({ comparisonView }) {
   const ref = useRef()
   const activeZone = useVenue((s) => s.activeZone)
@@ -208,6 +326,54 @@ function CameraRig({ comparisonView }) {
   const selectedSeat = useVenue((s) => s.selectedSeat)
   const isSeatView = useVenue((s) => s.isSeatView)
   const activePreset = useVenue((s) => s.activePreset)
+
+  const transitionRef = useRef({
+    active: false,
+    timer: 0,
+    duration: 1.4,
+    curve: null,
+    startTarget: new THREE.Vector3(),
+    endTarget: new THREE.Vector3(),
+    destCam: new THREE.Vector3(),
+    destLook: new THREE.Vector3(),
+  })
+
+  const flyTo = (cam, target, allowSmooth) => {
+    const controls = ref.current
+    if (!controls) return
+
+    if (!allowSmooth) {
+      transitionRef.current.active = false
+      controls.setLookAt(...cam, ...target, false)
+      return
+    }
+
+    const startPos = new THREE.Vector3()
+    controls.getPosition(startPos)
+    const startTarget = new THREE.Vector3()
+    controls.getTarget(startTarget)
+
+    const endPos = new THREE.Vector3(...cam)
+    const endTarget = new THREE.Vector3(...target)
+
+    // If already at or very close to destination, avoid redundant flight
+    if (startPos.distanceTo(endPos) < 1.0 && startTarget.distanceTo(endTarget) < 1.0) {
+      return
+    }
+
+    const traj = buildRealisticFlightTrajectory(startPos, startTarget, endPos, endTarget)
+    transitionRef.current = {
+      active: true,
+      timer: 0,
+      duration: traj.duration,
+      curve: traj.curve,
+      startTarget: startTarget.clone(),
+      endTarget: endTarget.clone(),
+      destCam: endPos.clone(),
+      destLook: endTarget.clone(),
+    }
+    play('whoosh')
+  }
 
   useEffect(() => {
     if (isIntroPlaying) return
@@ -219,7 +385,7 @@ function CameraRig({ comparisonView }) {
     // 1. Comparison Views override everything
     if (comparisonView && COMPARISON_VIEWS[comparisonView]) {
       const shot = COMPARISON_VIEWS[comparisonView]
-      ref.current?.setLookAt(...shot.cam, ...shot.target, false)
+      flyTo(shot.cam, shot.target, false)
       return
     }
 
@@ -227,8 +393,7 @@ function CameraRig({ comparisonView }) {
     if (isSeatView && selectedSeat) {
       const seatShot = getSeatSightlineShot(selectedSeat.zoneId, selectedSeat.index)
       if (seatShot) {
-        ref.current?.setLookAt(...seatShot.cam, ...seatShot.target, !reduceMotion)
-        play('whoosh')
+        flyTo(seatShot.cam, seatShot.target, !reduceMotion)
         return
       }
     }
@@ -236,16 +401,14 @@ function CameraRig({ comparisonView }) {
     // 3. Tour Step
     if (isTouring) {
       const shot = tourSteps[tourStep] ?? OVERVIEW
-      ref.current?.setLookAt(...shot.cam, ...shot.target, !reduceMotion)
-      play('whoosh')
+      flyTo(shot.cam, shot.target, !reduceMotion)
       return
     }
 
     // 4. Active Zone
     if (activeZone && zones[activeZone]) {
       const shot = zones[activeZone]
-      ref.current?.setLookAt(...shot.cam, ...shot.target, !reduceMotion)
-      play('whoosh')
+      flyTo(shot.cam, shot.target, !reduceMotion)
       return
     }
 
@@ -253,14 +416,13 @@ function CameraRig({ comparisonView }) {
     if (activePreset) {
       const preset = CAMERA_PRESETS.find((p) => p.id === activePreset)
       if (preset) {
-        ref.current?.setLookAt(...preset.cam, ...preset.target, !reduceMotion)
-        play('whoosh')
+        flyTo(preset.cam, preset.target, !reduceMotion)
         return
       }
     }
 
     // Fallback Overview
-    ref.current?.setLookAt(...OVERVIEW.cam, ...OVERVIEW.target, !reduceMotion)
+    flyTo(OVERVIEW.cam, OVERVIEW.target, !reduceMotion)
   }, [
     activeZone,
     isTouring,
@@ -276,14 +438,56 @@ function CameraRig({ comparisonView }) {
     if (ref.current && typeof window !== 'undefined') {
       window.__cameraControls = ref.current
     }
-  })
-
-  useFrame(() => {
-    if (ref.current && !isIntroPlaying) {
-      // Prevent camera from ever dipping below the ground/floor (minimum 1.8m eye level)
-      if (ref.current.camera.position.y < 1.8) {
-        ref.current.camera.position.y = 1.8
+    const controls = ref.current
+    if (!controls) return
+    const onControlStart = () => {
+      // If user starts manual orbit or drag, yield automatic flight immediately
+      if (transitionRef.current.active) {
+        transitionRef.current.active = false
       }
+    }
+    controls.addEventListener('controlstart', onControlStart)
+    return () => {
+      controls.removeEventListener('controlstart', onControlStart)
+    }
+  }, [])
+
+  useFrame((_, delta) => {
+    if (!ref.current || isIntroPlaying) return
+
+    // 1. Realistic Obstacle-Avoiding Trajectory Flight
+    if (transitionRef.current.active) {
+      const tr = transitionRef.current
+      tr.timer += delta
+      const progress = Math.min(1.0, tr.timer / tr.duration)
+      // Smooth cubic ease in-out
+      const ease =
+        progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2
+
+      const pos = tr.curve.getPoint(ease)
+      const target = new THREE.Vector3().lerpVectors(tr.startTarget, tr.endTarget, ease)
+
+      ref.current.setLookAt(pos.x, pos.y, pos.z, target.x, target.y, target.z, false)
+
+      if (progress >= 1.0) {
+        tr.active = false
+        ref.current.setLookAt(
+          tr.destCam.x,
+          tr.destCam.y,
+          tr.destCam.z,
+          tr.destLook.x,
+          tr.destLook.y,
+          tr.destLook.z,
+          false
+        )
+      }
+    }
+
+    // 2. Prevent camera from ever dipping below the ground/floor (minimum 1.8m eye level)
+    if (ref.current.camera.position.y < 1.8) {
+      ref.current.camera.position.y = 1.8
     }
   })
 
@@ -296,10 +500,10 @@ function CameraRig({ comparisonView }) {
       enabled={!isIntroPlaying}
       makeDefault
       minDistance={6}
-      maxDistance={32000}
+      maxDistance={750}
       maxPolarAngle={Math.PI * 0.485} // Strictly clamp rotation to above floor level (never below ground)
       minPolarAngle={0.06}
-      smoothTime={0.85}
+      smoothTime={0.8}
     />
   )
 }
@@ -394,11 +598,12 @@ export default function VenueScene({ comparisonView = null }) {
   return (
     <Canvas
       shadows
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       gl={{
         antialias: true,
         toneMapping: THREE.ACESFilmicToneMapping,
         toneMappingExposure: 1.05,
+        powerPreference: 'high-performance',
       }}
       camera={{ position: initialCam, fov: 44, near: 1, far: 38000 }}
       onPointerMissed={(e) => {

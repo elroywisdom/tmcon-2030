@@ -116,16 +116,19 @@ export default function AbujaCity() {
           fetch('/city/traffic.json').then((r) => r.json()),
         ])
         // Filter traffic to strictly exclude paths passing through the stadium complex (r < 250m)
-        const safeTraffic = (tRes || []).filter((car) => {
-          if (!car.p1 || !car.p2) return false
-          const ax = car.p1[0], az = car.p1[2]
-          const bx = car.p2[0], bz = car.p2[2]
-          const l2 = (bx - ax) ** 2 + (bz - az) ** 2
-          let t = l2 > 0 ? -((ax * (bx - ax)) + (az * (bz - az))) / l2 : 0
-          t = Math.max(0, Math.min(1, t))
-          const dist = Math.hypot(ax + t * (bx - ax), az + t * (bz - az))
-          return dist >= 250
-        })
+        // and cap to active precinct corridor (<= 2200m, max 240 cars) for smooth 60fps
+        const safeTraffic = (tRes || [])
+          .filter((car) => {
+            if (!car.p1 || !car.p2) return false
+            const ax = car.p1[0], az = car.p1[2]
+            const bx = car.p2[0], bz = car.p2[2]
+            const l2 = (bx - ax) ** 2 + (bz - az) ** 2
+            let t = l2 > 0 ? -((ax * (bx - ax)) + (az * (bz - az))) / l2 : 0
+            t = Math.max(0, Math.min(1, t))
+            const dist = Math.hypot(ax + t * (bx - ax), az + t * (bz - az))
+            return dist >= 250 && dist <= 2200
+          })
+          .slice(0, 240)
 
         if (active) {
           setCityData({
@@ -208,6 +211,7 @@ export default function AbujaCity() {
   // 3. Highway Traffic Flow (scaled for realism)
   const trafficCount = cityData?.traffic?.length || 0
   const trafficGeo = useMemo(() => new THREE.BoxGeometry(2.4, 0.6, 1.2), [])
+  const trafficDummy = useMemo(() => new THREE.Object3D(), [])
 
   // Per-frame animation for day/night interpolation and highway traffic
   useFrame((state, delta) => {
@@ -222,11 +226,12 @@ export default function AbujaCity() {
       )
     }
 
-    // Animate vehicle traffic along road vectors
-    if (trafficRef.current && cityData?.traffic) {
-      const dummy = new THREE.Object3D()
+    // Animate vehicle traffic along road vectors (reusing static dummy object)
+    if (trafficRef.current && cityData?.traffic && trafficCount > 0) {
       const time = state.clock.getElapsedTime()
-      cityData.traffic.forEach((car, i) => {
+      const cars = cityData.traffic
+      for (let i = 0; i < cars.length; i++) {
+        const car = cars[i]
         const p1 = car.p1
         const p2 = car.p2
         const progress = (car.t + time * car.speed * 0.15) % 1.0
@@ -235,11 +240,11 @@ export default function AbujaCity() {
         const z = p1[2] + (p2[2] - p1[2]) * progress
 
         const rotY = Math.atan2(p2[0] - p1[0], p2[1] - p1[1])
-        dummy.position.set(x, y, z)
-        dummy.rotation.set(0, rotY, 0)
-        dummy.updateMatrix()
-        trafficRef.current.setMatrixAt(i, dummy.matrix)
-      })
+        trafficDummy.position.set(x, y, z)
+        trafficDummy.rotation.set(0, rotY, 0)
+        trafficDummy.updateMatrix()
+        trafficRef.current.setMatrixAt(i, trafficDummy.matrix)
+      }
       trafficRef.current.instanceMatrix.needsUpdate = true
     }
   })
