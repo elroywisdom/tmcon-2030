@@ -411,14 +411,7 @@ export default function VenueExperience() {
               />
             </div>
             <h1 className="gate-poster-title">{EVENT_DETAILS.name}</h1>
-            <p className="gate-subtitle">3D Stadium Digital Twin • Portfolio Showcase</p>
-
-            <div className="gate-side-project-disclaimer">
-              <strong>CONCEPT SIMULATION</strong>
-              <p>
-                This is just a 3D simulation of what it would look like hosting TM CON at the National Stadium.
-              </p>
-            </div>
+            <p className="gate-subtitle">A 3D simulation of hosting TM CON at the National Stadium</p>
 
             <div className="gate-meta-grid">
               <div className="meta-box">
@@ -468,8 +461,7 @@ export default function VenueExperience() {
             </button>
 
             <span className="gate-audio-note">
-              <IconFloor size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-              Includes cinematic drone fly-in from the Velodrome into Moshood Abiola Stadium
+              Includes cinematic aerial drone fly-in
             </span>
           </div>
         </div>
