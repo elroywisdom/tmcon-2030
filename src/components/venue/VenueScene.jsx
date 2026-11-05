@@ -592,6 +592,9 @@ function Pins({ hidePins }) {
 export default function VenueScene({ comparisonView = null }) {
   const reset = useVenue((s) => s.reset)
   const isTouring = useVenue((s) => s.isTouring)
+  const timeOfDay = useVenue((s) => s.timeOfDay)
+  const isNight = timeOfDay === 'night'
+  const fogColor = isNight ? tokens.lighting.nightFog : tokens.lighting.dayFog
   const initialCam =
     (comparisonView && COMPARISON_VIEWS[comparisonView]?.cam) || OVERVIEW.cam
 
@@ -611,8 +614,8 @@ export default function VenueScene({ comparisonView = null }) {
         if (!isTouring && !comparisonView) reset()
       }}
     >
-      <color attach="background" args={[tokens.lighting.dayFog]} />
-      <fog attach="fog" args={[tokens.lighting.dayFog, 400, 32000]} />
+      <color attach="background" args={[fogColor]} />
+      <fog attach="fog" args={[fogColor, 400, 32000]} />
 
       <DynamicSkyDome />
       <EnvironmentLighting />

@@ -18,7 +18,7 @@ export const useVenue = create((set, get) => ({
   entered: false,
   isTouring: false,
   tourStep: 0,
-  timeOfDay: 'day', // 'day' | 'night'
+  timeOfDay: 'night', // 'day' | 'night' - default to night for concert live show & 3D drone intro
   crowdLevel: 'high', // 'off' | 'low' | 'medium' | 'high'
   liveShow: true, // Live show is on by default per user request
   qualityTier: 'high', // 'high' | 'medium' | 'low' | 'simple'
