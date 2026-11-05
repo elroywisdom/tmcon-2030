@@ -232,7 +232,6 @@ export default function VenueExperience() {
               alt="TM CON"
               className="nav-logo"
             />
-            <span className="nav-concept-pill">SIDE PROJECT DEMO</span>
             <span className="nav-divider">/</span>
             <span className="nav-venue-label">
               {comparisonView
@@ -399,10 +398,6 @@ export default function VenueExperience() {
       {!entered && !comparisonView && (
         <div className="gate gate-poster-overlay">
           <div className="gate-card gate-orange-poster outlined-block">
-            <div className="gate-header-strip">
-              <span className="gate-eyebrow-pill">PORTFOLIO DEMO</span>
-              <span className="gate-edition-pill">SIMULATION</span>
-            </div>
             <div className="gate-brand-banner">
               <img
                 src="/brand/TMCON-logo-Black.svg"

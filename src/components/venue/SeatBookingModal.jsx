@@ -222,7 +222,7 @@ export default function SeatBookingModal() {
           <div className="booking-header-left">
             <span className="booking-event-pill">
               <IconSparkle size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-              TM CON 2030 • PORTFOLIO SIDE PROJECT DEMO
+              TM CON 2030 • SEAT RESERVATION
             </span>
             <h2>{step === 4 ? 'Reservation Confirmed' : 'Reserve Your Stadium Seat'}</h2>
           </div>
@@ -261,8 +261,7 @@ export default function SeatBookingModal() {
           {step === 1 && (
             <div className="booking-step-content">
               <div className="side-project-banner-note">
-                <strong>PORTFOLIO DEMONSTRATION</strong>
-                <span>This interactive booking experience is a concept showcase for a personal portfolio side project. No real tickets are sold.</span>
+                <span>This simulated reservation is an interactive concept experience. No real tickets are sold.</span>
               </div>
 
               <p className="booking-intro-text">
