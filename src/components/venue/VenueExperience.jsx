@@ -414,10 +414,9 @@ export default function VenueExperience() {
             <p className="gate-subtitle">3D Stadium Digital Twin • Portfolio Showcase</p>
 
             <div className="gate-side-project-disclaimer">
-              <strong>PERSONAL PORTFOLIO SIDE PROJECT</strong>
+              <strong>CONCEPT SIMULATION</strong>
               <p>
-                This interactive 3D digital twin is a personal creative developer showcase exploring Three.js,
-                custom WebGL shaders, and geospatial Abuja terrain. It is an independent concept study and is not an official commercial project.
+                This is just a 3D simulation of what it would look like hosting TM CON at the National Stadium.
               </p>
             </div>
 

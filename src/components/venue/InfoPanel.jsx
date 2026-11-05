@@ -352,9 +352,9 @@ export default function InfoPanel() {
 
         {/* Independent Side Project Disclaimer */}
         <div className="panel-side-project-disclaimer">
-          <span className="disclaimer-badge">PORTFOLIO SIDE PROJECT</span>
+          <span className="disclaimer-badge">CONCEPT SIMULATION</span>
           <p>
-            This 3D digital twin is an independent creative developer demonstration. Not an official commercial event or ticket vendor.
+            This is just a 3D simulation of what it would look like hosting TM CON at the National Stadium.
           </p>
         </div>
       </aside>
