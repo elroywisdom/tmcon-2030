@@ -91,11 +91,11 @@ export default function SeatBookingModal() {
   const initialSeatLabel = selectedSeat?.label || 'Row B • Seat 14'
   const [seatLabel, setSeatLabel] = useState(initialSeatLabel)
 
-  // Attendee state
-  const [fullName, setFullName] = useState('El-Roy Wisdom')
-  const [email, setEmail] = useState('elroy@tmcon.global')
-  const [company, setCompany] = useState('Lead Design Engineer • TM Global')
-  const [badgeName, setBadgeName] = useState('EL-ROY')
+  // Attendee state (blank by default for visitor input)
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [badgeName, setBadgeName] = useState('')
 
   // Payment state
   const [paymentMethod, setPaymentMethod] = useState('card')
@@ -222,7 +222,7 @@ export default function SeatBookingModal() {
           <div className="booking-header-left">
             <span className="booking-event-pill">
               <IconSparkle size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-              TM CON 2030 • SEAT RESERVATION
+              TM CON 2030 • PORTFOLIO SIDE PROJECT DEMO
             </span>
             <h2>{step === 4 ? 'Reservation Confirmed' : 'Reserve Your Stadium Seat'}</h2>
           </div>
@@ -260,8 +260,13 @@ export default function SeatBookingModal() {
           {/* STEP 1: SEAT & TIER SELECTION */}
           {step === 1 && (
             <div className="booking-step-content">
+              <div className="side-project-banner-note">
+                <strong>PORTFOLIO DEMONSTRATION</strong>
+                <span>This interactive booking experience is a concept showcase for a personal portfolio side project. No real tickets are sold.</span>
+              </div>
+
               <p className="booking-intro-text">
-                Choose your seating section at Moshood Abiola Stadium. Test your seat sightlines in 3D before confirming.
+                Choose your seating section at Moshood Abiola Stadium. Test your seat sightlines in 3D before confirming your simulated reservation.
               </p>
 
               {/* Tier Selector Cards */}
@@ -374,7 +379,7 @@ export default function SeatBookingModal() {
                     className="neubrutal-input"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. El-Roy Wisdom"
+                    placeholder="e.g. Alex Morgan"
                     required
                   />
                 </div>
@@ -387,7 +392,7 @@ export default function SeatBookingModal() {
                     className="neubrutal-input"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. elroy@tmcon.global"
+                    placeholder="e.g. attendee@example.com"
                     required
                   />
                 </div>
@@ -400,7 +405,7 @@ export default function SeatBookingModal() {
                     className="neubrutal-input"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    placeholder="e.g. Lead Design Engineer • TM Global"
+                    placeholder="e.g. Software Engineer • Tech Corp"
                   />
                 </div>
 
@@ -412,7 +417,7 @@ export default function SeatBookingModal() {
                     className="neubrutal-input"
                     value={badgeName}
                     onChange={(e) => setBadgeName(e.target.value)}
-                    placeholder="e.g. EL-ROY"
+                    placeholder="e.g. ALEX"
                   />
                 </div>
               </div>
@@ -473,7 +478,7 @@ export default function SeatBookingModal() {
                 <div className="summary-table">
                   <div className="table-row">
                     <span>Attendee</span>
-                    <strong>{fullName} ({email})</strong>
+                    <strong>{fullName || 'Guest Attendee'} ({email || 'guest@example.com'})</strong>
                   </div>
                   <div className="table-row">
                     <span>Venue & Edition</span>
@@ -522,8 +527,8 @@ export default function SeatBookingModal() {
                 <div className="ticket-body-grid">
                   <div className="ticket-field">
                     <span className="field-lbl">ATTENDEE</span>
-                    <strong className="field-val">{fullName}</strong>
-                    <span className="field-sub">{company}</span>
+                    <strong className="field-val">{fullName || 'Attendee Delegate'}</strong>
+                    <span className="field-sub">{company || 'Technology & Media Guest'}</span>
                   </div>
                   <div className="ticket-field">
                     <span className="field-lbl">SEAT ASSIGNMENT</span>

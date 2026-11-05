@@ -232,6 +232,7 @@ export default function VenueExperience() {
               alt="TM CON"
               className="nav-logo"
             />
+            <span className="nav-concept-pill">SIDE PROJECT DEMO</span>
             <span className="nav-divider">/</span>
             <span className="nav-venue-label">
               {comparisonView
@@ -246,26 +247,10 @@ export default function VenueExperience() {
               <button
                 className="replay-intro-btn"
                 onClick={replayIntro}
-                title="Replay the 18s cinematic corridor flight"
+                title="Replay the 13s cinematic corridor flight"
               >
                 <IconReplay size={14} />
                 <span>REPLAY INTRO</span>
-              </button>
-            )}
-
-            {/* Live Show Concert Mode Toggle */}
-            {!comparisonView && (
-              <button
-                className={`live-show-nav-btn ${liveShow ? 'active' : ''}`}
-                onClick={toggleLiveShow}
-                title={
-                  liveShow
-                    ? 'Stop live show'
-                    : 'Activate live show (moving beams, lasers, particle sparkles & crowd wave)'
-                }
-              >
-                <IconLiveShow size={14} />
-                <span>{liveShow ? 'SHOW ON' : 'LIVE SHOW'}</span>
               </button>
             )}
 
@@ -415,8 +400,8 @@ export default function VenueExperience() {
         <div className="gate gate-poster-overlay">
           <div className="gate-card gate-orange-poster outlined-block">
             <div className="gate-header-strip">
-              <span className="gate-eyebrow-pill">TM GLOBAL PRESENTS</span>
-              <span className="gate-edition-pill">2030 EDITION</span>
+              <span className="gate-eyebrow-pill">PORTFOLIO DEMO</span>
+              <span className="gate-edition-pill">SIDE PROJECT</span>
             </div>
             <div className="gate-brand-banner">
               <img
@@ -426,12 +411,15 @@ export default function VenueExperience() {
               />
             </div>
             <h1 className="gate-poster-title">{EVENT_DETAILS.name}</h1>
-            <p className="gate-subtitle">{EVENT_DETAILS.fullName}</p>
-            <p className="gate-desc">
-              Explore the interactive 3D digital model of Moshood Abiola National
-              Stadium, Abuja. Tour the about 60,000-seat bowl, test sightlines,
-              and experience the venue in both daylight and night concert mode.
-            </p>
+            <p className="gate-subtitle">3D Stadium Digital Twin • Portfolio Showcase</p>
+
+            <div className="gate-side-project-disclaimer">
+              <strong>PERSONAL PORTFOLIO SIDE PROJECT</strong>
+              <p>
+                This interactive 3D digital twin is a personal creative developer showcase exploring Three.js,
+                custom WebGL shaders, and geospatial Abuja terrain. It is an independent concept study and is not an official commercial project.
+              </p>
+            </div>
 
             <div className="gate-meta-grid">
               <div className="meta-box">

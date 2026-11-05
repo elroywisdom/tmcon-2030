@@ -1,7 +1,10 @@
-# TM CON 2030 — Interactive 3D Stadium & Conference Experience
+# TM CON 2030 — Interactive 3D Stadium Digital Twin (Portfolio Side Project)
 
-> **Moshood Abiola National Stadium, Abuja • November 2030**  
-> An interactive WebGL/Three.js 3D digital twin and architectural visualization experience built for TM CON 2030 (Technology Media Conference).
+> **Moshood Abiola National Stadium, Abuja • Portfolio Concept Showcase**  
+> An interactive WebGL/Three.js 3D digital twin and architectural visualization experience built as an independent developer portfolio side project.
+
+> [!NOTE]
+> **Portfolio Side Project Notice**: This project is an independent creative developer demonstration showcasing 3D WebGL digital twin engineering (Three.js r174, React Three Fiber, custom shaders, and geospatial Abuja modeling). It is a concept prototype and portfolio showcase, not an official commercial event or ticket vendor.
 
 ---
 

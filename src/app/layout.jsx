@@ -1,9 +1,9 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'TM CON 2030 | Technology Media Conference | Abuja National Stadium',
+  title: 'TM CON 2030 (Portfolio Concept) | 3D Digital Twin Experience',
   description:
-    'Experience TM CON 2030 at Moshood Abiola National Stadium, Abuja in interactive 3D. Explore stages, reserve seating, discover brand pavilions, and tour the venue.',
+    'A personal portfolio 3D digital twin project demonstrating interactive Three.js, geospatial terrain, and stadium architecture at Moshood Abiola National Stadium, Abuja. Created as an independent creative side project showcase.',
 }
 
 export default function RootLayout({ children }) {

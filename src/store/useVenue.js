@@ -20,7 +20,7 @@ export const useVenue = create((set, get) => ({
   tourStep: 0,
   timeOfDay: 'day', // 'day' | 'night'
   crowdLevel: 'high', // 'off' | 'low' | 'medium' | 'high'
-  liveShow: false,
+  liveShow: true, // Live show is on by default per user request
   qualityTier: 'high', // 'high' | 'medium' | 'low' | 'simple'
   ledTrackIndex: 0,
   ledPlaying: true,

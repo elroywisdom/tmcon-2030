@@ -317,9 +317,9 @@ function PinItem({ z, hidden }) {
   useFrame(() => {
     if (!btnRef.current) return
     const dist = camera.position.distanceTo(pinV)
-    // Hide when too close (inside zone < 60m), too far (> 500m), or active in preset
+    // Hide when too close (inside zone < 40m), too far (> 650m), or active in preset
     const isInsideZone = activePreset === z.id
-    const isVisible = !hidden && !isInsideZone && dist >= 60 && dist <= 520
+    const isVisible = !hidden && !isInsideZone && dist >= 40 && dist <= 650
     btnRef.current.style.display = isVisible ? 'inline-flex' : 'none'
     btnRef.current.style.pointerEvents = isVisible ? 'auto' : 'none'
   })
@@ -328,11 +328,12 @@ function PinItem({ z, hidden }) {
     <Html
       position={z.pin}
       center
-      zIndexRange={[10, 0]}
+      zIndexRange={[25, 0]}
       style={STABLE_PIN_HTML_STYLE}
     >
       <button
         ref={btnRef}
+        type="button"
         className="pin outlined-block"
         style={{
           '--accent': z.color,
@@ -341,8 +342,20 @@ function PinItem({ z, hidden }) {
           fontSize: '11px',
           fontWeight: 800,
           whiteSpace: 'nowrap',
+          cursor: 'pointer',
+          pointerEvents: 'auto',
         }}
-        onClick={() => focusZone(z.id)}
+        onPointerDown={(e) => {
+          e.stopPropagation()
+        }}
+        onPointerUp={(e) => {
+          e.stopPropagation()
+        }}
+        onClick={(e) => {
+          e.stopPropagation()
+          play('click')
+          focusZone(z.id)
+        }}
         aria-label={`Explore ${z.label}`}
       >
         <span className="pin-dot" />
@@ -388,7 +401,8 @@ export default function VenueScene({ comparisonView = null }) {
         toneMappingExposure: 1.05,
       }}
       camera={{ position: initialCam, fov: 44, near: 1, far: 38000 }}
-      onPointerMissed={() => {
+      onPointerMissed={(e) => {
+        if (e && e.target && e.target.tagName !== 'CANVAS') return
         if (!isTouring && !comparisonView) reset()
       }}
     >

@@ -60,6 +60,13 @@ export default function InfoPanel() {
     }
   }, [])
 
+  // Automatically expand sidebar when a user clicks a zone pin or label
+  useEffect(() => {
+    if (activeZone) {
+      setCollapsed(false)
+    }
+  }, [activeZone])
+
   const go = (id) => {
     play('click')
     focusZone(id)
@@ -203,16 +210,10 @@ export default function InfoPanel() {
                     OPEN REEL FULLSCREEN
                   </button>
 
-                  <button
-                    className={`live-show-pill ${liveShow ? 'active' : ''}`}
-                    onClick={() => {
-                      play('click')
-                      toggleLiveShow()
-                    }}
-                  >
+                  <span className="live-show-pill active">
                     <IconLightning size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 5 }} />
-                    {liveShow ? 'LIVE SHOW RUNNING' : 'PLAY LIVE SHOW'}
-                  </button>
+                    CONCERT LIVE SHOW ACTIVE
+                  </span>
                 </div>
               </div>
             )}
@@ -347,6 +348,14 @@ export default function InfoPanel() {
               </button>
             ))}
           </nav>
+        </div>
+
+        {/* Independent Side Project Disclaimer */}
+        <div className="panel-side-project-disclaimer">
+          <span className="disclaimer-badge">PORTFOLIO SIDE PROJECT</span>
+          <p>
+            This 3D digital twin is an independent creative developer demonstration. Not an official commercial event or ticket vendor.
+          </p>
         </div>
       </aside>
 
